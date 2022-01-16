@@ -3,3 +3,5 @@ fma_metadata.zip
 fma_small
 fma_metadata
 data
+__pycache__
+.ipynb_checkpoints
