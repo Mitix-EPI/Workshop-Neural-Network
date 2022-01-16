@@ -5,6 +5,7 @@ sudo docker run -v $PWD:/mnt -it miseyu/docker-ubuntu16-python3.6:latest
 # If you quit the container, you can run the container again by typing:
 # docker start <container_id>
 # docker exec -it <container_id> bash
+
 # don't forget to stop the container by typing:
 # docker stop <container_id>
 

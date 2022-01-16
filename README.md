@@ -26,6 +26,12 @@ The workshop is divided into 3 parts:
 
 **You will find the content of all these parts in the pdf [here](TODO)**
 
-## Contact :telephone_receiver:
+## Sources :notebook:
 
-If you have any question about the algorithm or the code, you can contact me directly on [Discord](https://discord.com/users/501067187793166365) or via [e-mail](juandev-pro@protonmail.com).
+Datas from [here](https://github.com/mdeff/fma)
+
+How to extract the data from [here](https://github.com/crowdAI/crowdai-musical-genre-recognition-starter-kit)
+
+Helps us [link](https://navdeepsinghh.medium.com/identifying-the-genre-of-a-song-with-neural-networks-851db89c42f0)
+
+Good other project [link](https://towardsdatascience.com/using-cnns-and-rnns-for-music-genre-recognition-2435fb2ed6af)
