@@ -35,3 +35,4 @@ tqdm==4.11.2
 urllib3==1.22
 websocket-client==0.40.0
 Werkzeug==0.12.2
+ffmpeg
