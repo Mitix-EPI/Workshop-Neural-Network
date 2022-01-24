@@ -53,12 +53,6 @@ def generate_features_and_labels():
         for f in sound_files:
             print("\t-> Processing %s..." % f)
             features = extract_features_song(f)
-            if (not os.path.isdir("mkdir " + "computed/" + (f.split('/')[1]))) :
-                os.system("mkdir " + "computed/" + (f.split('/')[1]))
-            if (not os.path.isdir("mkdir " + "computed/" + (f.split('/')[1])) + '/' + f.split('/')[2]) :
-                os.system("mkdir " + "computed/" + (f.split('/')[1]) + '/' + f.split('/')[2])
-            os.system("touch computed" + f[4:-4] + ".csv")
-            np.savetxt("computed" + f[4:-4] + ".csv", features, delimiter=",")
             all_features.append(features)
             all_labels.append(genre)
 
