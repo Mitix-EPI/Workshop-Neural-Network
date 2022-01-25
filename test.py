@@ -37,6 +37,8 @@ def extract_features_song(f):
     mfcc /= np.amax(np.absolute(mfcc))
     test = np.ndarray.flatten(mfcc)
     return test
+def get_features_song(f) :
+    return np.genfromtxt("computed/" + f[4:-4] + ".csv", delimiter=',')[:1320]
 
 def generate_features_and_labels():
     global nb_genres
@@ -46,13 +48,15 @@ def generate_features_and_labels():
     GENRES = ['Electronic', 'Experimental', 'Folk', 'Hip-Hop',
             'Instrumental', 'International', 'Pop', 'Rock']
     for genre in GENRES:
-        sound_files = get_genre_songs(genre, limits=5) # 100
+        sound_files = get_genre_songs(genre, limits=1000) # 100
         print('Processing %d songs in %s genre...' % (len(sound_files), genre))
         if sound_files:
             nb_genres += 1
         for f in sound_files:
+            if (not os.path.isfile("computed" + f[4:-4] + ".csv")) :
+                continue
             print("\t-> Processing %s..." % f)
-            features = extract_features_song(f)
+            features = get_features_song(f)
             all_features.append(features)
             all_labels.append(genre)
 
@@ -62,7 +66,7 @@ def generate_features_and_labels():
     # onehot_labels = to_categorical(label_row_ids, len(label_uniq_ids))
     onehot_labels = np.eye(len(label_uniq_ids))[label_row_ids]
     print(onehot_labels)
-    print(all_features)
+    print(min([np.shape(i) for i in all_features]))
     return np.stack(all_features), onehot_labels
 
 features, labels = generate_features_and_labels()
