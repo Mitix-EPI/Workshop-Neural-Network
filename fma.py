@@ -49,7 +49,7 @@ def load(filepath):
 
 def get_audio_path(track_id):
     tid_str = '{:06d}'.format(track_id)
-    return os.path.join('data', 'fma_small', tid_str[:3], tid_str + '.mp3')
+    return os.path.join('computed', 'fma_small', tid_str[:3], tid_str + '.csv')
 
 
 # Faulty MP3 train files (https://github.com/mdeff/fma/issues/8).

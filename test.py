@@ -1,9 +1,11 @@
 import pandas as pd
+import time
 labels = pd.read_csv('data/train_labels.csv', index_col=0)
 
 import fma
 path = fma.get_audio_path(1042)
 nb_genres = 0
+nb_features = 10000
 
 print(path)
 
@@ -28,17 +30,24 @@ def get_genre_songs(genre, limits=1000):
     random_paths = random.choices(paths, k=limits)
     return random_paths
 
-def extract_features_song(f):
-    y, _ = librosa.load(f)
+def time_convert(sec):
+    mins = sec // 60
+    sec = sec % 60
+    hours = mins // 60
+    mins = mins % 60
+    print("\nTime Lapsed = {0}:{1}:{2}\n".format(int(hours),int(mins),sec))
 
-    # get Mel-frequency cepstral coefficients
-    mfcc = librosa.feature.mfcc(y)
-    # normalize values between -1,1 (divide by max)
-    mfcc /= np.amax(np.absolute(mfcc))
-    test = np.ndarray.flatten(mfcc)
-    return test
-def get_features_song(f) :
-    return np.genfromtxt("computed/" + f[4:-4] + ".csv", delimiter=',')[:1320]
+def get_features_song(f):
+    global nb_features
+    try:
+        features = np.genfromtxt(f, delimiter=',')[:nb_features]
+        return features
+    except:
+        return "error"
+    
+def display_details_compute(genres, arr_nb_songs_by_genre):
+    for i in range(len(genres)):
+        print("{} songs in {} genre".format(arr_nb_songs_by_genre[i], genres[i]))
 
 def generate_features_and_labels():
     global nb_genres
@@ -47,38 +56,39 @@ def generate_features_and_labels():
 
     GENRES = ['Electronic', 'Experimental', 'Folk', 'Hip-Hop',
             'Instrumental', 'International', 'Pop', 'Rock']
+    arr_nb_songs_by_genre = []
+    start_time = time.time() # Calc time to compute
     for genre in GENRES:
-        sound_files = get_genre_songs(genre, limits=1000) # 100
+        songs_computed = 0
+        sound_files = get_genre_songs(genre, limits=500) # 100
         print('Processing %d songs in %s genre...' % (len(sound_files), genre))
         if sound_files:
             nb_genres += 1
         for f in sound_files:
-            if (not os.path.isfile("computed" + f[4:-4] + ".csv")) :
+            if (not os.path.isfile(f)) :
                 continue
-            print("\t-> Processing %s..." % f)
+            print("\t-> Processing %s ..." % f)
             features = get_features_song(f)
-            all_features.append(features)
-            all_labels.append(genre)
-
+            if features != "error":
+                all_features.append(features)
+                all_labels.append(genre)
+                songs_computed += 1
+        arr_nb_songs_by_genre.append(songs_computed)
     # convert labels to one-hot encoding
     label_uniq_ids, label_row_ids = np.unique(all_labels, return_inverse=True)
     label_row_ids = label_row_ids.astype(np.int32, copy=False)
     # onehot_labels = to_categorical(label_row_ids, len(label_uniq_ids))
     onehot_labels = np.eye(len(label_uniq_ids))[label_row_ids]
-    print(onehot_labels)
-    print(min([np.shape(i) for i in all_features]))
+    end_time = time.time()
+    time_lapsed = end_time - start_time
+    time_convert(time_lapsed) # Show time to compute
+    print(display_details_compute(GENRES, arr_nb_songs_by_genre))
     return np.stack(all_features), onehot_labels
 
 features, labels = generate_features_and_labels()
 
 print("np.shape(features): ", np.shape(features))
 print("np.shape(labels): ", np.shape(labels))
-
-# import tensorflow as tf
-# from tensorflow.keras import layers
-# from tensorflow.keras import activations
-# from keras.models import Sequential
-# from keras.layers import Dense, Activation
 
 training_split = 0.8
 
@@ -105,39 +115,21 @@ print("np.shape(train_labels): ", np.shape(train_labels))
 
 from sklearn.neural_network import MLPClassifier
 
-clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15,2), random_state=1)
+start_time = time.time() # Calc time to compute
+
+clf = MLPClassifier(solver='lbfgs', alpha=1e-10, hidden_layer_sizes=(15,), activation = 'logistic', random_state=5, max_iter=10000, learning_rate_init = 0.1)
 clf.fit(train_input, train_labels)
 
+end_time = time.time()
+time_lapsed = end_time - start_time
+time_convert(time_lapsed) # Show time to compute
+
 predict_test = clf.predict(test_input)
-print("predict_test: ", predict_test)
-print("test_labels: ", test_labels)
 
 from sklearn.metrics import classification_report,confusion_matrix
 
 print(confusion_matrix(test_labels.argmax(axis=1),predict_test.argmax(axis=1)))
 print(classification_report(test_labels.argmax(axis=1),predict_test.argmax(axis=1)))
-
-
-
-# model = tf.keras.Sequential([
-#     layers.Dense(100, input_dim=np.shape(train_input)[1]),
-#     layers.Activation(activations.relu),
-#     layers.Dense(10),
-#     layers.Activation(activations.softmax),
-#     ])
-
-# model.compile(optimizer='adam',
-#               loss='categorical_crossentropy',
-#               metrics=['accuracy'])
-# print(model.summary())
-
-# model.fit(train_input, train_labels, epochs=10, batch_size=32,
-#           validation_split=0.2)
-
-# loss, acc = model.evaluate(test_input, test_labels, batch_size=32)
-
-# print("Done!")
-# print("Loss: %.4f, accuracy: %.4f" % (loss, acc))
 
 # TODO
 
