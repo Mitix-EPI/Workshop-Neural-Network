@@ -37,7 +37,9 @@ def get_features_song(f):
     global nb_features
     try:
         features = np.genfromtxt(f, delimiter=',')[:nb_features]
-        return features
+        if (len(features) == nb_features):
+            return features
+        return []
     except:
         return []
     
@@ -78,6 +80,7 @@ def generate_features_and_labels():
     end_time = time.time()
     time_lapsed = end_time - start_time
     time_convert(time_lapsed) # Show time to compute
+    print(min([np.shape(i) for i in all_features]))
     print(display_details_compute(GENRES, arr_nb_songs_by_genre))
     return np.stack(all_features), onehot_labels
 
