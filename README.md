@@ -14,7 +14,25 @@ Workshop to discover Neural Network through the subject of identify the genre of
 
 ## Requirements :books:
 
-- Python 3.8 -> Install python 3.8 [here](https://www.w3computing.com/python/installing-python-windows-macos-linux/)
+The workshop is based on python container to ease the work. You must have Docker :whale: installed in your environment.
+
+Once you arrive to the 2nd step, you will need to execute the following commands:
+
+```bash
+> sudo docker run -v $PWD:/mnt -w /mnt -it miseyu/docker-ubuntu16-python3.6:latest # run the container
+
+# Once in the container, you can execute the following commands
+> apt-get update && apt-get install -y ffmpeg && pip install --upgrade pip && python3.6 -m pip install -r requirements.txt # install the dependencies
+> python3.6 test.py # Run the test
+```
+
+If you closed the container, you can re-open it by executing the following command:
+```bash
+> docker ps -a | grep miseyu/docker-ubuntu16-python3.6:latest | awk '{print $1}' # Get the latest container id
+> sudo docker start <container_id> # start the container
+> sudo docker exec -it <container_id> bash # enter the container
+    > cd mnt # enter the workspace
+```
 
 ## Workshop Content :bulb:
 

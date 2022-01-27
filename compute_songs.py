@@ -1,5 +1,5 @@
 import pandas as pd
-labels = pd.read_csv('data/train_labels.csv', index_col=0)
+labels = pd.read_csv('./train_labels.csv', index_col=0)
 
 import fma
 path = fma.get_audio_path(1042)

@@ -1,15 +1,11 @@
 import pandas as pd
 import time
-labels = pd.read_csv('data/train_labels.csv', index_col=0)
+labels = pd.read_csv('./train_labels.csv', index_col=0)
 
 import fma
-path = fma.get_audio_path(1042)
 nb_genres = 0
 nb_features = 10000
 
-print(path)
-
-import librosa
 import numpy as np
 # from tensorflow.keras.utils import to_categorical
 import os
@@ -43,7 +39,7 @@ def get_features_song(f):
         features = np.genfromtxt(f, delimiter=',')[:nb_features]
         return features
     except:
-        return "error"
+        return []
     
 def display_details_compute(genres, arr_nb_songs_by_genre):
     for i in range(len(genres)):
@@ -60,7 +56,7 @@ def generate_features_and_labels():
     start_time = time.time() # Calc time to compute
     for genre in GENRES:
         songs_computed = 0
-        sound_files = get_genre_songs(genre, limits=500) # 100
+        sound_files = get_genre_songs(genre, limits=5) # 100
         print('Processing %d songs in %s genre...' % (len(sound_files), genre))
         if sound_files:
             nb_genres += 1
@@ -69,7 +65,7 @@ def generate_features_and_labels():
                 continue
             print("\t-> Processing %s ..." % f)
             features = get_features_song(f)
-            if features != "error":
+            if len(features):
                 all_features.append(features)
                 all_labels.append(genre)
                 songs_computed += 1
@@ -117,13 +113,18 @@ from sklearn.neural_network import MLPClassifier
 
 start_time = time.time() # Calc time to compute
 
-clf = MLPClassifier(solver='lbfgs', alpha=1e-10, hidden_layer_sizes=(15,), activation = 'logistic', random_state=5, max_iter=10000, learning_rate_init = 0.1)
+nb_hidden_layer_sizes = (15,)
+
+print("\nCreating model...")
+clf = MLPClassifier(solver='lbfgs', alpha=1e-10, hidden_layer_sizes=nb_hidden_layer_sizes, activation = 'logistic', random_state=5, max_iter=15000, learning_rate_init = 0.1)
+print("Training the model...")
 clf.fit(train_input, train_labels)
 
 end_time = time.time()
 time_lapsed = end_time - start_time
 time_convert(time_lapsed) # Show time to compute
 
+print("Testing Neural Network...")
 predict_test = clf.predict(test_input)
 
 from sklearn.metrics import classification_report,confusion_matrix
@@ -131,11 +132,21 @@ from sklearn.metrics import classification_report,confusion_matrix
 print(confusion_matrix(test_labels.argmax(axis=1),predict_test.argmax(axis=1)))
 print(classification_report(test_labels.argmax(axis=1),predict_test.argmax(axis=1)))
 
+ans = input("Do you want to generate the NN graph [Y/N] ? ")
+if (ans == "Y" or ans == "y" or ans == ""):
+    import matplotlib.pyplot as plt
+    from draw_neural_net import draw_neural_net
+
+    print("Generating Neural Network Graph ...")
+    fig = plt.figure(figsize=(12, 12))
+    ax = fig.gca()
+    ax.axis('off')
+
+    layer_sizes = [int(nb_features / 1000)] + list(nb_hidden_layer_sizes) + [nb_genres]
+    draw_neural_net(ax, .1, .9, .1, .9, layer_sizes, clf.coefs_, clf.intercepts_, clf.n_iter_, clf.loss_)
+    fig.savefig('nn_digaram.png')
+
 # TODO
-
-# Rework NN -> Not working not very good
-
-# NEXT STEPS (3rd step)
 
 # How to upgrade the NN ?
     # -> Create a cross-validation set.
