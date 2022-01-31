@@ -1,5 +1,5 @@
 import pandas as pd
-labels = pd.read_csv('./train_labels.csv', index_col=0)
+labels = pd.read_csv('./data/train_labels.csv', index_col=0)
 
 import fma
 path = fma.get_audio_path(1042)
@@ -50,17 +50,17 @@ for genre in GENRES:
         nb_genres += 1
     for f in sound_files:
         print("\t-> Processing %s..." % f)
-        if (not os.path.isdir("computed/" + (f.split('/')[1]))) :
-            os.system("mkdir " + "computed/" + (f.split('/')[1]))
-        if (not os.path.isdir("computed/" + (f.split('/')[1]) + '/' + f.split('/')[2])) :
-            os.system("mkdir " + "computed/" + (f.split('/')[1]) + '/' + f.split('/')[2])
-        if (os.path.isfile("computed" + f[4:-4] + ".csv")):
+        if (not os.path.isdir("data/" + (f.split('/')[1]))) :
+            os.system("mkdir " + "data/" + (f.split('/')[1]))
+        if (not os.path.isdir("data/" + (f.split('/')[1]) + '/' + f.split('/')[2])) :
+            os.system("mkdir " + "data/" + (f.split('/')[1]) + '/' + f.split('/')[2])
+        if (os.path.isfile("data" + f[4:-4] + ".csv")):
             continue
         try :
             features = extract_features_song(f)
         except :
              continue
-        os.system("touch computed" + f[4:-4] + ".csv")
-        np.savetxt("computed" + f[4:-4] + ".csv", features, delimiter=",")
+        os.system("touch data" + f[4:-4] + ".csv")
+        np.savetxt("data" + f[4:-4] + ".csv", features, delimiter=",")
         all_features.append(features)
         all_labels.append(genre)

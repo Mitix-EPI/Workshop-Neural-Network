@@ -1,6 +1,6 @@
 import pandas as pd
 import time
-labels = pd.read_csv('./train_labels.csv', index_col=0)
+labels = pd.read_csv('./data/train_labels.csv', index_col=0)
 
 import fma
 nb_genres = 0

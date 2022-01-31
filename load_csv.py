@@ -10,5 +10,5 @@ def read_directory(directory):
             files += read_directory(directory + filename + "/")
     return files
 
-for f in read_directory("computed/") :
+for f in read_directory("data/") :
     print(np.genfromtxt(f, delimiter=','))

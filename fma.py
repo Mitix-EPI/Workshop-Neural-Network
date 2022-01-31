@@ -7,4 +7,4 @@ import pandas as pd
 
 def get_audio_path(track_id):
     tid_str = '{:06d}'.format(track_id)
-    return os.path.join('computed', 'fma_small', tid_str[:3], tid_str + '.csv')
+    return os.path.join('data', 'fma_small', tid_str[:3], tid_str + '.csv')
