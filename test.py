@@ -1,13 +1,13 @@
 import pandas as pd
 import time
-labels = pd.read_csv('./data/train_labels.csv', index_col=0)
-
 import fma
+
+labels = pd.read_csv('./data/train_labels.csv', index_col=0)
 nb_genres = 0
-nb_features = 10000
+nb_features = 10000 # Variable that you can change
+nb_music_by_genre = 5 # Varaible that you can change
 
 import numpy as np
-# from tensorflow.keras.utils import to_categorical
 import os
 import random
 
@@ -47,7 +47,7 @@ def display_details_compute(genres, arr_nb_songs_by_genre):
     for i in range(len(genres)):
         print("{} songs in {} genre".format(arr_nb_songs_by_genre[i], genres[i]))
 
-def generate_features_and_labels():
+def generate_features_and_labels(nb_music_by_genre):
     global nb_genres
     all_features = []
     all_labels = []
@@ -58,7 +58,7 @@ def generate_features_and_labels():
     start_time = time.time() # Calc time to compute
     for genre in GENRES:
         songs_computed = 0
-        sound_files = get_genre_songs(genre, limits=5) # 100
+        sound_files = get_genre_songs(genre, limits=nb_music_by_genre) # 100
         print('Processing %d songs in %s genre...' % (len(sound_files), genre))
         if sound_files:
             nb_genres += 1
@@ -84,7 +84,7 @@ def generate_features_and_labels():
     print(display_details_compute(GENRES, arr_nb_songs_by_genre))
     return np.stack(all_features), onehot_labels
 
-features, labels = generate_features_and_labels()
+features, labels = generate_features_and_labels(nb_music_by_genre)
 
 print("np.shape(features): ", np.shape(features))
 print("np.shape(labels): ", np.shape(labels))
