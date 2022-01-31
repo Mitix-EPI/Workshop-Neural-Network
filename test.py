@@ -2,7 +2,7 @@ import pandas as pd
 import time
 import fma
 
-labels = pd.read_csv('./data/train_labels.csv', index_col=0)
+labels = pd.read_csv('./data/Y_train.csv', index_col=0)
 nb_genres = 0
 nb_features = 10000 # Variable that you can change
 nb_music_by_genre = 5 # Varaible that you can change
@@ -103,14 +103,14 @@ print("np.shape(test): ", np.shape(test))
 
 print("nb_genres: ", nb_genres)
 
-train_input = train[:,:-nb_genres]
-train_labels = train[:,-nb_genres:].astype(int)
+X_train = train[:,:-nb_genres]
+Y_train = train[:,-nb_genres:].astype(int)
 
-test_input = test[:,:-nb_genres]
-test_labels = test[:,-nb_genres:].astype(int)
+X_test = test[:,:-nb_genres]
+Y_test = test[:,-nb_genres:].astype(int)
 
-print("np.shape(train_input): ", np.shape(train_input))
-print("np.shape(train_labels): ", np.shape(train_labels))
+print("np.shape(X_train): ", np.shape(X_train))
+print("np.shape(Y_train): ", np.shape(Y_train))
 
 from sklearn.neural_network import MLPClassifier
 
@@ -119,21 +119,47 @@ start_time = time.time() # Calc time to compute
 nb_hidden_layer_sizes = (15,)
 
 print("\nCreating model...")
-clf = MLPClassifier(solver='lbfgs', alpha=1e-10, hidden_layer_sizes=nb_hidden_layer_sizes, activation = 'logistic', random_state=5, max_iter=15000, learning_rate_init = 0.1)
-print("Training the model...")
-clf.fit(train_input, train_labels)
+"""
+Creating Model
+"""
+
+clf = None # TODO
+
+"""
+End Creating Model
+"""
+
+print("Training the NN...")
+
+"""
+Training NN
+"""
+
+# TODO
+
+"""
+End Training NN
+"""
 
 end_time = time.time()
 time_lapsed = end_time - start_time
 time_convert(time_lapsed) # Show time to compute
 
 print("Testing Neural Network...")
-predict_test = clf.predict(test_input)
+"""
+Testing Neural Network with X_test
+"""
+
+predict_test = None # TODO
+
+"""
+End Testing Neural Network
+"""
 
 from sklearn.metrics import classification_report,confusion_matrix
 
-print(confusion_matrix(test_labels.argmax(axis=1),predict_test.argmax(axis=1)))
-print(classification_report(test_labels.argmax(axis=1),predict_test.argmax(axis=1)))
+print(confusion_matrix(Y_test.argmax(axis=1),predict_test.argmax(axis=1)))
+print(classification_report(Y_test.argmax(axis=1),predict_test.argmax(axis=1)))
 
 ans = input("Do you want to generate the NN graph [Y/N] ? ")
 if (ans == "Y" or ans == "y" or ans == ""):
@@ -148,8 +174,6 @@ if (ans == "Y" or ans == "y" or ans == ""):
     layer_sizes = [int(nb_features / 1000)] + list(nb_hidden_layer_sizes) + [nb_genres]
     draw_neural_net(ax, .1, .9, .1, .9, layer_sizes, clf.coefs_, clf.intercepts_, clf.n_iter_, clf.loss_)
     fig.savefig('nn_digaram.png')
-
-# TODO
 
 # How to upgrade the NN ?
     # -> Create a cross-validation set.
