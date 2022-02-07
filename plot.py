@@ -12,7 +12,7 @@ import os
 import random
 import fma
 
-genre_labels = pd.read_csv('./computed/train_labels.csv', index_col=0)
+genre_labels = pd.read_csv('./data/train_labels.csv', index_col=0)
 nb_genres = 0
 nb_features = 10000 # Variable that you can change
 nb_music_by_genre = 5 # Varaible that you can change
