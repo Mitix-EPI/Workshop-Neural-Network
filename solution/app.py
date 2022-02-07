@@ -1,12 +1,17 @@
 import pandas as pd
 import time
-import fma
 
-labels = pd.read_csv('./data/Y_train.csv', index_col=0)
+
+labels = pd.read_csv('.././data/train_labels.csv', index_col=0)
 nb_genres = 0
 nb_features = 10000 # Variable that you can change
 nb_music_by_genre = 5 # Varaible that you can change
 
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+import fma
 import numpy as np
 import os
 import random
@@ -18,7 +23,7 @@ def get_genre_songs(genre, limits=1000):
     tmp = labels.loc[labels['genre'] == genre]
     indexes = tmp.index.values
     for i in indexes:
-        path = fma.get_audio_path(i)
+        path = fma.get_audio_path(i, solution=True)
         if (os.path.exists(path)):
             paths.append(path)  
     if (len(paths) < limits):

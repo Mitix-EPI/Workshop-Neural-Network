@@ -10,9 +10,13 @@ from sklearn.exceptions import ConvergenceWarning
 import numpy as np
 import os
 import random
+import sys, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 import fma
 
-genre_labels = pd.read_csv('./computed/train_labels.csv', index_col=0)
+genre_labels = pd.read_csv('../data/train_labels.csv', index_col=0)
 nb_genres = 0
 nb_features = 10000 # Variable that you can change
 nb_music_by_genre = 5 # Varaible that you can change
@@ -160,7 +164,7 @@ def get_genre_songs(genre, limits=1000):
     tmp = genre_labels.loc[genre_labels['genre'] == genre]
     indexes = tmp.index.values
     for i in indexes:
-        path = fma.get_audio_path(i)
+        path = fma.get_audio_path(i, solution=True)
         if (os.path.exists(path)):
             paths.append(path)  
     if (len(paths) < limits):
