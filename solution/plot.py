@@ -119,11 +119,8 @@ plot_args = [
 ]
 
 
-def plot_on_dataset(X, y, ax, name):
+def plot_on_dataset(X, y):
     # for each dataset, plot learning for each learning strategy
-    print("\nlearning on dataset %s" % name)
-    ax.set_title(name)
-
     X = MinMaxScaler().fit_transform(X)
     mlps = []
 
@@ -143,9 +140,9 @@ def plot_on_dataset(X, y, ax, name):
         print("Training set score: %f" % mlp.score(X, y))
         print("Training set loss: %f" % mlp.loss_)
     for mlp, label, args in zip(mlps, labels, plot_args):
-        ax.plot(mlp.loss_curve_, label=label, **args)
+        plt.plot(mlp.loss_curve_, label=label, **args)
 
-fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+fig, axes = plt.figure(figsize=(10, 10)), [1]
 
 def get_features_song(f):
     global nb_features
@@ -238,8 +235,8 @@ test_labels = test[:,-nb_genres:].astype(int)
 
 nb_hidden_layer_sizes = (15,)
 
-for ax in axes.ravel():
-    plot_on_dataset(train_input, train_labels, ax=ax, name="hello")
+plot_on_dataset(train_input, train_labels)
 
-fig.legend(ax.get_lines(), labels, ncol=3, loc="upper center")
+fig.legend(labels, ncol=3, loc="upper center")
+plt.savefig('plot.png')
 plt.show()
