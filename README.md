@@ -16,22 +16,19 @@ Workshop to discover Neural Network through the subject of identify the genre of
 
 The workshop is based on python container to ease the work. You must have Docker :whale: installed in your environment.
 
-Once you arrive to the 2nd step, you will need to execute the following commands:
+Once you arrive to the 2nd step, you will need to download the [data.zip](https://drive.google.com/drive/folders/1Qy9P7WEWRzHVr1rd9Nj4_QFQFWZNwsSG), put it in the root of the project, extract it (**manually**) and execute the following commands:
 
 ```bash
-> sudo docker run -v $PWD:/mnt -w /mnt -it miseyu/docker-ubuntu16-python3.6:latest # run the container
-
-# Once in the container, you can execute the following commands
-> apt-get update && apt-get install -y ffmpeg && pip install --upgrade pip && python3.6 -m pip install -r requirements.txt # install the dependencies
-> python3.6 test.py # Run the test
+> sudo docker run -v $PWD:/mnt -w /mnt -it miseyu/docker-ubuntu16-python3.6:latest
+    $> apt-get update && apt-get install -y ffmpeg
+    $> pip install --upgrade pip
+    $> python3.6 -m pip install -r requirements.txt
 ```
 
-If you closed the container, you can re-open it by executing the following command:
+If you exit the container, you can use the following command to restart it:
 ```bash
-> docker ps -a | grep miseyu/docker-ubuntu16-python3.6:latest | awk '{print $1}' # Get the latest container id
-> sudo docker start <container_id> # start the container
-> sudo docker exec -it <container_id> bash # enter the container
-    > cd mnt # enter the workspace
+> docker start [container_id]
+> docker exec -it -w /mnt [container_id] bash
 ```
 
 ## Workshop Content :bulb:
@@ -42,7 +39,7 @@ The workshop is divided into 3 parts:
 - **Part 2**: Developing a neural network
 - **Part 3**: Testing and upgrading the neural network
 
-**You will find the content of all these parts in the pdf [here](TODO)**
+**You will find the content of all these parts in the pdf [here](https://github.com/Mitix-EPI/Workshop-Neural-Network/blob/main/subject.pdf)**
 
 ## Sources :notebook:
 
