@@ -5,7 +5,7 @@
 1. [Introduction](#introduction-dart)
 2. [Requirements](#requirements-books)
 3. [Workshop Content](#workshop-content-bulb)
-4. [Contact](#contact-telephone_receiver)
+4. [Sources](#sources-notebook)
 
 ## Introduction :dart:
 
