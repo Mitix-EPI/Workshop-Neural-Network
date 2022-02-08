@@ -54,6 +54,10 @@ def generate_features_and_labels(nb_music_by_genre):
 
     GENRES = ['Electronic', 'Experimental', 'Folk', 'Hip-Hop',
             'Instrumental', 'International', 'Pop', 'Rock']
+
+    perc_index = 0
+    perc_total = nb_music_by_genre * len(GENRES)
+
     arr_nb_songs_by_genre = []
     start_time = time.time() # Calc time to compute
     for genre in GENRES:
@@ -65,7 +69,8 @@ def generate_features_and_labels(nb_music_by_genre):
         for f in sound_files:
             if (not os.path.isfile(f)) :
                 continue
-            print("\t-> Processing %s ..." % f)
+            perc_index += 1
+            print("\t-> Processing ", f, "... [", "{:.2f}".format(perc_index * 100 / perc_total), "%]")
             features = get_features_song(f)
             if len(features):
                 all_features.append(features)
